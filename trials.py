@@ -7,23 +7,18 @@ function  = 'sigmoid' #or 'tanh'
 
 inputs = [[0.8,0.300,0.200,0.750],
           [0.8,0.500,0.500,0.750],
-          [0.8,0.200,0.100,0.750]] #size: batch, conc1, conc2, cunc3
+          [0.8,0.200,0.100,0.750]] #experimental input matrix for 2 iteration steps (1st row is the initial state)
 
 w = [[0,  0, 0, 0],
      [0,  0, 0, 0.900],
      [0,  0, 0, 0.900],
-     [0,  0, 0, 0]] # size: 3x3
+     [0,  0, 0, 0]] # wxperimental weight matrix
 
 inputs = np.array(inputs)
 w = np.array(w)
 
 #%%
-# we assume that we have 3 concepts. Γυρίζει τη νέα τιμή του comcept mono. 
-#t=1
-#instancebef = inputs[0]  
-#instance = inputs [1]
-
-slope = 1.5
+slope = 1.5 #experimental sigmoid slope
 
 #%% Concept value Calculator: give the row of instances before and after, give the weight matrix, give the excact concept t that you refer to
 def calc_value (t, w, instance, instancebef): # t is an integer describing which concept we are calculating, w is the weight matrix, instance is the row with the initial values of the concepts
@@ -33,25 +28,25 @@ def calc_value (t, w, instance, instancebef): # t is an integer describing which
     
     for i in range(0,len(instance)):
         
-        #ορισε τον DC matrix
+        #DC: disturbance caused by the change of initial state
         dc = instance - instancebef
         
-        #can calc με τις equations gia dc matrix
+        #based on dc, calculate the new value of one concept
             
         temp = temp + dc[i]*w[j,t-1]
         j = j+1
     
-    sumw = 0
+    sumw = 0 #useless sum of weights (for experiments)
     for i in range (len(w)):
         
         sumw = sumw + abs( w[i, t-1])
         
-    ak1 = instance[t-1]+ temp
+    ak1 = instance[t-1]+ temp # new value of one concepts
     
     if temp==0:
-        ak1n = ak1
+        ak1n = ak1 # if no disturbance, return null
     else:
-        ak1n = 1/(1 + math.exp(-slope*ak1))
+        ak1n = 1/(1 + math.exp(-slope*ak1)) #if disturbance, return this
         
     #ak1n = ak1
     #ak3 = math.tanh(ak1)
@@ -59,23 +54,21 @@ def calc_value (t, w, instance, instancebef): # t is an integer describing which
     return ak1n
     
 
-#%% Τωρα πρέπει να υπολογίσεις με τη σειρά την νέα τιμή που παίρνει κάθε cocepts, και με βάση αυτή να υπολογιστεί η αλλαγή στο επόμενο! όχι με 
-#βαση την αρχική. 
+#%% 
 
-def iter_step (inputs, w, nonew):
+def iter_step (inputs, w, nonew): # nonew: if == 0, then it will calculate the first iteration step (i.e. from row 1 to row 2). If == 1, it will calculate from row 1 to row 2
 
     instancebef = inputs[nonew]
     instance = inputs [nonew+1]    
     
-    for i in range (np.size(inputs,1)):
-        
+    for i in range (np.size(inputs,1)): #for every concept in inputs
 
-        new_i = calc_value(i+1, w, instance, instancebef)
-        instance[i] = new_i
+        new_i = calc_value(i+1, w, instance, instancebef) #calls the calc_value function. the first argument is the concept number for calculation
+        instance[i] = new_i # change the instance
         
     return instance
 
 #%%       
                               
 
-allll = iter_step (inputs,w,1)
+allll = iter_step (inputs,w,1)  #test 
