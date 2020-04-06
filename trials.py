@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from copy import deepcopy
 
 
 
@@ -9,12 +10,13 @@ inputs = [[0.8,0.300,0.200,0.750],
           [0.8,0.500,0.500,0.750],
           [0.8,0.200,0.100,0.750]] #experimental input matrix for 2 iteration steps (1st row is the initial state)
 
-w = [[0,  0, 0, 0],
-     [0,  0, 0, 0.900],
-     [0,  0, 0, 0.900],
+w = [[0,  0.5, 0, 0],
+     [0.2,  0, 0, 0.900],
+     [0.2,  0, 0, 0.900],
      [0,  0, 0, 0]] # wxperimental weight matrix
 
 inputs = np.array(inputs)
+inputa = deepcopy(inputs)
 w = np.array(w)
 
 #%%
@@ -48,27 +50,76 @@ def calc_value (t, w, instance, instancebef): # t is an integer describing which
     else:
         ak1n = 1/(1 + math.exp(-slope*ak1)) #if disturbance, return this
         
-    #ak1n = ak1
+    ak1n = ak1
     #ak3 = math.tanh(ak1)
     #ak2 = 1 / (1 + math.exp(-sumw*ak1))
     return ak1n
     
 
-#%% 
 
-def iter_step (inputs, w, nonew): # nonew: if == 0, then it will calculate the first iteration step (i.e. from row 1 to row 2). If == 1, it will calculate from row 1 to row 2
+def iter_step (inputw, w, nonew): # nonew: if == 0, then it will calculate the first iteration step (i.e. from row 1 to row 2). If == 1, it will calculate from row 1 to row 2
 
-    instancebef = inputs[nonew]
-    instance = inputs [nonew+1]    
+    instancebef = deepcopy(inputw[nonew,:])
+    instance = deepcopy(inputw [nonew+1, :])
     
-    for i in range (np.size(inputs,1)): #for every concept in inputs
+    new_bef = deepcopy(instance)
+    
+    for i in range (np.size(inputw,1)): #for every concept in inputs
 
         new_i = calc_value(i+1, w, instance, instancebef) #calls the calc_value function. the first argument is the concept number for calculation
         instance[i] = new_i # change the instance
         
-    return instance
+    return instance, new_bef
 
-#%%       
-                              
+#%%
 
-allll = iter_step (inputs,w,1)  #test 
+in1 = inputs[:,:]                         
+
+for k in range (0,50):
+    
+    if k == 0:
+        new,bef = iter_step (in1,w,0)
+    else:
+        new = new[np.newaxis]
+        bef = bef[np.newaxis]
+        in_new = np.concatenate([bef,new],0)
+        new,bef = iter_step (in_new,w,0)
+    print (bef)
+    print (new)#test 
+    
+
+#%%
+new = new[np.newaxis]
+bef = bef[np.newaxis]
+in_new = np.concatenate([bef,new],0)
+#%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
