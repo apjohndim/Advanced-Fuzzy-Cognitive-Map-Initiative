@@ -1,14 +1,25 @@
 # Advanced-Fuzzy-Cognitive-Map-Initiative
+Version 0.2
+
 Initiative to apply the new equations and activation function
-
-
-For now, this initiative is useless, until every parameter is set.
 
 Experiments are conducted in order to define the activation function
 
 Needs to be transformed to library later
 
-For the Mathemtical Formulas, check the related references:
+For the State Space and Rule Embedded version of the AFCM, use REAFCM.py
+
+Needs specific weight tables to run (simulation weight tables are included)
+
+Current issues:
+
+1. Script works with only 31 inputs, 3 states
+2. Available activation functions include sigmoid and tanh
+
+
+
+
+For the Mathematical Formulas, check the related references:
 
 1. Bourgani E, Stylios CD, Manis G, Georgopoulos VC. Time dependent fuzzy cognitive maps for medical diagnosis. In: Hellenic conference on artificial intelligence. Springer; 2014. p. 544–554. 
 
