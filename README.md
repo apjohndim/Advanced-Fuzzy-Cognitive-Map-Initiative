@@ -1,22 +1,14 @@
 # Advanced-Fuzzy-Cognitive-Map-Initiative
 Version 0.2
 
-Initiative to apply the new equations and activation function
-
-Experiments are conducted in order to define the activation function
-
-Needs to be transformed to library later
-
 For the State Space and Rule Embedded version of the AFCM, use REAFCM.py
 
 Needs specific weight tables to run (simulation weight tables are included)
 
 Current issues:
 
-1. Script works with only 31 inputs, 3 states
+1. Script works with only 31 inputs, 3 states, for Coronary Artery Disease Diagnosis using attributes as shown in input.xlsx
 2. Available activation functions include sigmoid and tanh
-
-
 
 
 For the Mathematical Formulas, check the related references:
